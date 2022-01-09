@@ -34,11 +34,18 @@ client.connect(err => {
     products.find({})
       .toArray((err, documents) => {
         // res.send(documents);
-        console.log(documents);
+         console.log(documents);
       })
   })
 
   // Product Detail show
+  app.get('/products/:key', (req, res) => {
+    products.find({ key: req.params.key })
+      .toArray((err, documents) => {
+        res.send(documents[0])
+      })
+  })
+   // Product Detail show
   app.get('/products/:key', (req, res) => {
     products.find({ key: req.params.key })
       .toArray((err, documents) => {
