@@ -19,55 +19,33 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const products = client.db("shopping_product").collection("product");
-  
+
   // add products
-  app.post('/addProduct',(req,res)=>{
+  app.post('/addProduct', (req, res) => {
     const product = req.body;
     products.insertOne(product)
-    .then(result=>{
-      console.log(result);
-    })
+      .then(result => {
+        console.log(result);
+      })
   })
 
   // Product show
-  app.get('/products',(req,res)=>{
+  app.get('/products', (req, res) => {
     products.find({})
-    .toArray((err,documents)=>{
-      res.send(documents)
-    })
+      .toArray((err, documents) => {
+        // res.send(documents);
+        console.log(documents);
+      })
   })
 
-   // Product Detail show
-   app.get('/products/:key',(req,res)=>{
-    products.find({key: req.params.key})
-    .toArray((err,documents)=>{
-      res.send(documents[0])
-    })
-  })
-  
-   // Product Detail show
-   app.get('/products/:key',(req,res)=>{
-    products.find({key: req.params.key})
-    .toArray((err,documents)=>{
-      res.send(documents[0])
-    })
-  })
   // Product Detail show
-  app.get('/products/:key',(req,res)=>{
-    products.find({key: req.params.key})
-    .toArray((err,documents)=>{
-      res.send(documents[0])
-    })
+  app.get('/products/:key', (req, res) => {
+    products.find({ key: req.params.key })
+      .toArray((err, documents) => {
+        res.send(documents[0])
+      })
   })
-  
-   // Product Detail show
-   app.get('/products/:key',(req,res)=>{
-    products.find({key: req.params.key})
-    .toArray((err,documents)=>{
-      res.send(documents[0])
-    })
-  })
-   
+
 });
 
 app.get('/', (req, res) => {
