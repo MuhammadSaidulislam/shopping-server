@@ -11,48 +11,41 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // mongoDb
 require('dotenv').config()
-console.log(process.env.DB_PASS);
+
+ console.log(process.env.DB_USER);
+ console.log(process.env.DB_PASS);
+ console.log(process.env.DB_NAME);
 
 // mongoDb connection
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.npcff.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect(err => {
-  const products = client.db("shopping_product").collection("product");
 
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+client.connect(err => {
+  const clientProducts = client.db("shopping_db").collection("shopping_product");
   // add products
-  app.post('/addProduct', (req, res) => {
-    const product = req.body;
-    products.insertOne(product)
-      .then(result => {
-        console.log(result);
-      })
+   console.log('success');
+
+  //  Add product
+  app.post('/addProduct',(req,res)=>{
+    const products = req.body;
+    clientProducts.insertMany(products)
+    .then(result=>{
+       res.send(result.insertedCount)
+    })
   })
 
-  // Product show
+  // Show product
   app.get('/products', (req, res) => {
     products.find({})
       .toArray((err, documents) => {
-        // res.send(documents);
-         console.log(documents);
+        res.send(documents);
+        //  console.log(documents);
       })
   })
 
-  // Product Detail show
-  app.get('/products/:key', (req, res) => {
-    products.find({ key: req.params.key })
-      .toArray((err, documents) => {
-        res.send(documents[0])
-      })
-  })
-   // Product Detail show
-  app.get('/products/:key', (req, res) => {
-    products.find({ key: req.params.key })
-      .toArray((err, documents) => {
-        res.send(documents[0])
-      })
-  })
-
+  
 });
 
 app.get('/', (req, res) => {
