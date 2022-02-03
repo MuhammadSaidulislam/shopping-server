@@ -37,10 +37,29 @@ client.connect(err => {
   })
 
   // Show product
+
   app.get('/products', (req, res) => {
-    products.find({})
+    clientProducts.find({})
       .toArray((err, documents) => {
         res.send(documents);
+        //  console.log(documents);
+      })
+  })
+
+
+   // Show product detail
+
+   app.get('/products/:key', (req, res) => {
+    clientProducts.find({key: req.params.key})
+      .toArray((err, documents) => {
+        res.send(documents[0]);
+        //  console.log(documents);
+      })
+  })
+  app.get('/products/:key', (req, res) => {
+    clientProducts.find({key: req.params.key})
+      .toArray((err, documents) => {
+        res.send(documents[0]);
         //  console.log(documents);
       })
   })
